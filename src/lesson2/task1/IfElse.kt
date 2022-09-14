@@ -1,10 +1,13 @@
-@file:Suppress("UNUSED_PARAMETER")
+
 
 package lesson2.task1
 
 import lesson1.task1.discriminant
 import kotlin.math.max
 import kotlin.math.sqrt
+import kotlin.math.abs
+import kotlin.math.min
+
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
 // Максимальное количество баллов = 6
@@ -133,7 +136,14 @@ fun whichRookThreatens(
  */
 fun rookOrBishopThreatens(
     kingX: Int, kingY: Int, rookX: Int, rookY: Int, bishopX: Int, bishopY: Int
-): Int = TODO()
+): Int {
+    return when {
+        ((kingX == rookX) || (kingY == rookY)) && ((abs(bishopX - kingX)) == (abs(bishopY - kingY))) -> 3
+        (abs(bishopX - kingX)) == (abs(bishopY - kingY)) -> 2
+        (kingX == rookX) || (kingY == rookY) -> 1
+        else -> 0
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -145,10 +155,12 @@ fun rookOrBishopThreatens(
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
     if (a < b + c && b < a + c && c < a + b) {
-        if ((b * b + c * c - a * a < 0) || (c * c + a * a - b * b < 0) || (a * a + b * b - c * c < 0)) return 2
-        else {
-            if ((a * a + b * b == c * c) || (b * b + c * c == a * a) || (c * c + a * a == b * b)) return 1
-            else return 0
+        if ((b * b + c * c - a * a < 0) || (c * c + a * a - b * b < 0) || (a * a + b * b - c * c < 0)) {
+            return 2
+        } else {
+            if (((a * a) + b * b == c * c) || (b * b + c * c == a * a) || (c * c + a * a == b * b)) {
+                return 1
+            } else return 0
         }
     } else return -1
 }
@@ -161,5 +173,8 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
+    val intersection = min(d, b) - max(a, c)
+    return if (intersection < 0) -1 else intersection
+}
 
