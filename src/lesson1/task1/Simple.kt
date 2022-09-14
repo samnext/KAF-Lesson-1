@@ -133,7 +133,6 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
     val t = initial.toDouble()
     val temp = (1 + percent.toDouble() / 100).pow(3)
     return t * temp
-
 }
 
 /**
