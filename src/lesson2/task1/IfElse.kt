@@ -68,7 +68,15 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String {
+    return when {
+        (age % 100) in 11..14 -> "$age лет"
+        (age % 10 in 2..4) -> "$age года"
+        (age % 10 in 5..9 || age % 10 == 0) -> "$age лет"
+        else -> "$age год"
+    }
+}
+
 
 /**
  * Простая (2 балла)
@@ -78,10 +86,19 @@ fun ageDescription(age: Int): String = TODO()
  * Определить, за какое время он одолел первую половину пути?
  */
 fun timeForHalfWay(
-    t1: Double, v1: Double,
-    t2: Double, v2: Double,
-    t3: Double, v3: Double
-): Double = TODO()
+    t1: Double, v1: Double, t2: Double, v2: Double, t3: Double, v3: Double
+): Double {
+    val halfS = ((v1 * t1) + (v2 * t2) + (v3 * t3)) / 2
+    return when {
+        halfS in 0.0..(v1 * t1) -> halfS / v1
+        halfS in 0.0..(v2 * t2) && (v1 * t1 == 0.0) -> halfS / v2 + t1
+        halfS in 0.0..(v3 * t3) && (v1 * t1 == 0.0) && (v2 * t2 == 0.0) -> halfS / v3 + t1 + t2
+        halfS in (v1 * t1)..(v2 * t2 + v1 * t1) -> (halfS - (v1 * t1)) / v2 + t1
+        halfS in (v2 * t2 + v1 * t1)..(v3 * t3 + v1 * t1 + v2 * t2) -> (halfS - (v1 * t1 + v2 * t2)) / v3 + t1 + t2
+        else -> Double.NaN
+    }
+}
+
 
 /**
  * Простая (2 балла)
@@ -93,10 +110,15 @@ fun timeForHalfWay(
  * Считать, что ладьи не могут загораживать друг друга
  */
 fun whichRookThreatens(
-    kingX: Int, kingY: Int,
-    rookX1: Int, rookY1: Int,
-    rookX2: Int, rookY2: Int
-): Int = TODO()
+    kingX: Int, kingY: Int, rookX1: Int, rookY1: Int, rookX2: Int, rookY2: Int
+): Int {
+    return when {
+        (kingX == rookX1 && kingY == rookY2) || (kingX == rookX2 && kingY == rookY1) -> 3
+        (kingX == rookX1) || (kingY == rookY1) -> 1
+        (kingX == rookX2) || (kingY == rookY2) -> 2
+        else -> 0
+    }
+}
 
 /**
  * Простая (2 балла)
@@ -109,9 +131,7 @@ fun whichRookThreatens(
  * Считать, что ладья и слон не могут загораживать друг друга.
  */
 fun rookOrBishopThreatens(
-    kingX: Int, kingY: Int,
-    rookX: Int, rookY: Int,
-    bishopX: Int, bishopY: Int
+    kingX: Int, kingY: Int, rookX: Int, rookY: Int, bishopX: Int, bishopY: Int
 ): Int = TODO()
 
 /**
@@ -122,7 +142,15 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    if (a < b + c && b < a + c && c < a + b) {
+        if ((b * b + c * c - a * a < 0) || (c * c + a * a - b * b < 0) || (a * a + b * b - c * c < 0)) return 2
+        else {
+            if ((a * a + b * b == c * c) || (b * b + c * c == a * a) || (c * c + a * a == b * b)) return 1
+            else return 0
+        }
+    } else return -1
+}
 
 /**
  * Средняя (3 балла)
@@ -133,3 +161,4 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+
