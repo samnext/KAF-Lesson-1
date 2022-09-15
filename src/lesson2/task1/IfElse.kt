@@ -1,5 +1,3 @@
-
-
 package lesson2.task1
 
 import lesson1.task1.discriminant
@@ -7,6 +5,7 @@ import kotlin.math.max
 import kotlin.math.sqrt
 import kotlin.math.abs
 import kotlin.math.min
+import kotlin.math.pow
 
 
 // Урок 2: ветвления (здесь), логический тип (см. 2.2).
@@ -94,8 +93,6 @@ fun timeForHalfWay(
     val halfS = ((v1 * t1) + (v2 * t2) + (v3 * t3)) / 2
     return when {
         halfS in 0.0..(v1 * t1) -> halfS / v1
-        halfS in 0.0..(v2 * t2) && (v1 * t1 == 0.0) -> halfS / v2 + t1
-        halfS in 0.0..(v3 * t3) && (v1 * t1 == 0.0) && (v2 * t2 == 0.0) -> halfS / v3 + t1 + t2
         halfS in (v1 * t1)..(v2 * t2 + v1 * t1) -> (halfS - (v1 * t1)) / v2 + t1
         halfS in (v2 * t2 + v1 * t1)..(v3 * t3 + v1 * t1 + v2 * t2) -> (halfS - (v1 * t1 + v2 * t2)) / v3 + t1 + t2
         else -> Double.NaN
@@ -115,10 +112,15 @@ fun timeForHalfWay(
 fun whichRookThreatens(
     kingX: Int, kingY: Int, rookX1: Int, rookY1: Int, rookX2: Int, rookY2: Int
 ): Int {
+    val kXrX1 = (kingX == rookX1)
+    val kXrX2 = (kingX == rookX2)
+    val kYrY1 = (kingY == rookY1)
+    val kYrY2 = (kingY == rookY2)
+
     return when {
-        (kingX == rookX1 && kingY == rookY2) || (kingX == rookX2 && kingY == rookY1) -> 3
-        (kingX == rookX1) || (kingY == rookY1) -> 1
-        (kingX == rookX2) || (kingY == rookY2) -> 2
+        (kXrX1 && kYrY2) || (kXrX2 && kYrY1) -> 3
+        (kXrX1) || (kYrY1) -> 1
+        (kXrX2) || (kYrY2) -> 2
         else -> 0
     }
 
@@ -137,10 +139,15 @@ fun whichRookThreatens(
 fun rookOrBishopThreatens(
     kingX: Int, kingY: Int, rookX: Int, rookY: Int, bishopX: Int, bishopY: Int
 ): Int {
+    val kXrX = (kingX == rookX)
+    val kYrY = (kingY == rookY)
+    val bXkX = abs(bishopX - kingX)
+    val bYkY = abs(bishopY - kingY)
+
     return when {
-        ((kingX == rookX) || (kingY == rookY)) && ((abs(bishopX - kingX)) == (abs(bishopY - kingY))) -> 3
-        (abs(bishopX - kingX)) == (abs(bishopY - kingY)) -> 2
-        (kingX == rookX) || (kingY == rookY) -> 1
+        (kXrX || kYrY) && (bXkX == bYkY) -> 3
+        bXkX == bYkY -> 2
+        kXrX || kYrY -> 1
         else -> 0
     }
 }
@@ -154,15 +161,15 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    if (a < b + c && b < a + c && c < a + b) {
-        if ((b * b + c * c - a * a < 0) || (c * c + a * a - b * b < 0) || (a * a + b * b - c * c < 0)) {
-            return 2
-        } else {
-            if (((a * a) + b * b == c * c) || (b * b + c * c == a * a) || (c * c + a * a == b * b)) {
-                return 1
-            } else return 0
-        }
-    } else return -1
+    val maxSide = maxOf(a, b, c)
+    val minSide = minOf(a, b, c)
+    val avgSide = a + b + c - minSide - maxSide
+    return when {
+        maxSide > avgSide + minSide -> -1
+        maxSide.pow(2.0) == avgSide.pow(2.0) + minSide.pow(2.0) -> 1
+        maxSide.pow(2.0) > avgSide.pow(2.0) + minSide.pow(2.0) -> 2
+        else -> 0
+    }
 }
 
 /**
