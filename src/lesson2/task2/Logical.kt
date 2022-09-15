@@ -91,6 +91,5 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
         minBrickSide >= mint && maxBrickSide >= avgt -> true
         else -> false
     }
-
 }
 
