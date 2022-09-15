@@ -84,10 +84,13 @@ fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     val mint = minOf(a, b, c)
     val maxt = maxOf(a, b, c)
     val avgt = a + b + c - maxt - mint
-    var a1 = false
-    if ((avgt * mint <= r * s) && (maxOf(r, s) >= avgt)) {
-        a1 = true
-    } else if ((mint * maxt <= r * s) && (maxOf(r, s) >= maxt)) a1 = true
-    return a1
+    val maxBrickSide = maxOf(r, s)
+    val minBrickSide = minOf(r, s)
+    return when {
+        minBrickSide >= mint && maxBrickSide >= maxt -> true
+        minBrickSide >= mint && maxBrickSide >= avgt -> true
+        else -> false
+    }
+
 }
 
