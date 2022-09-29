@@ -2,6 +2,7 @@
 
 package lesson3.task1
 
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 
@@ -168,14 +169,14 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var t1 = maxOf(m, n)
-    var t2 = minOf(m, n)
-    while (t1 != 0 && t2 != 0) {
-        val temp = t1 % t2
-        if (temp == 0) return (m * n) / t2
+    var maxNumber = maxOf(m, n)
+    var minNumber = minOf(m, n)
+    while (maxNumber != 0 && minNumber != 0) {
+        val temp = maxNumber % minNumber
+        if (temp == 0) return (m * n) / minNumber
         else {
-            t1 = t2
-            t2 = temp
+            maxNumber = minNumber
+            minNumber = temp
         }
     }
     return 1
@@ -189,7 +190,22 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean = TODO()
+fun isCoPrime(m: Int, n: Int): Boolean {
+    var maxNumber = maxOf(n, m)
+    var minNumber = minOf(n, m)
+    var gcd = 0
+    while (maxNumber != 0 && minNumber != 0) {
+        val temp = maxNumber % minNumber
+        if (temp == 0) {
+            gcd = minNumber
+            break
+        } else {
+            maxNumber = minNumber
+            minNumber = temp
+        }
+    }
+    return (gcd == 1)
+}
 
 /**
  * Средняя (3 балла)
@@ -198,7 +214,16 @@ fun isCoPrime(m: Int, n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun revert(n: Int): Int = TODO()
+fun revert(n: Int): Int {
+    var t = n
+    var result = 0
+    for (i in digitNumber(n) downTo 1) {
+        val lastNumber = t % 10
+        result += (lastNumber * 10.toDouble().pow(i - 1)).toInt()
+        t /= 10
+    }
+    return result
+}
 
 /**
  * Средняя (3 балла)
@@ -219,7 +244,16 @@ fun isPalindrome(n: Int): Boolean = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun hasDifferentDigits(n: Int): Boolean = TODO()
+fun hasDifferentDigits(n: Int): Boolean {
+    val temp = n % 10
+    var t = n
+    var count = 0
+    do {
+        t /= 10
+        count++
+    } while (t > 0)
+    return (digitCountInNumber(n, temp) != count)
+}
 
 /**
  * Средняя (4 балла)
