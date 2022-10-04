@@ -4,6 +4,7 @@ package lesson3.task1
 
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.math.abs
 
 
 // Урок 3: циклы
@@ -66,6 +67,22 @@ fun digitCountInNumber(n: Int, m: Int): Int =
         else -> digitCountInNumber(n / 10, m) + digitCountInNumber(n % 10, m)
     }
 
+fun gcd(n: Int, m: Int): Int {
+    var maxNumber = maxOf(m, n)
+    var minNumber = minOf(m, n)
+    while (maxNumber != 0 && minNumber != 0) {
+        val temp = maxNumber % minNumber
+        if (temp == 0) return minNumber
+        else {
+            maxNumber = minNumber
+            minNumber = temp
+        }
+    }
+    return 1
+}
+
+fun sqr(n: Int) = n * n
+
 /**
  * Простая (2 балла)
  *
@@ -111,14 +128,10 @@ fun fib(n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var minDiv = n
     for (i in 2..(sqrt(n.toDouble()).toInt()) + 1) {
-        if (n % i == 0) {
-            minDiv = i
-            break
-        }
+        if (n % i == 0) return i
     }
-    return minDiv
+    return n
 }
 
 /**
@@ -126,15 +139,8 @@ fun minDivisor(n: Int): Int {
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    var maxDiv = 1
-    for (i in ((sqrt(n.toDouble()).toInt()) + 1) downTo 2) {
-        if (n % i == 0) {
-            maxDiv = maxOf((n / i), i)
-        }
-    }
-    return maxDiv
-}
+fun maxDivisor(n: Int): Int =
+    n / minDivisor(n)
 
 /**
  * Простая (2 балла)
@@ -168,19 +174,8 @@ fun collatzSteps(x: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    var maxNumber = maxOf(m, n)
-    var minNumber = minOf(m, n)
-    while (maxNumber != 0 && minNumber != 0) {
-        val temp = maxNumber % minNumber
-        if (temp == 0) return (m * n) / minNumber
-        else {
-            maxNumber = minNumber
-            minNumber = temp
-        }
-    }
-    return 1
-}
+fun lcm(m: Int, n: Int): Int =
+    (m * n) / gcd(m, n)
 
 
 /**
@@ -190,22 +185,8 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    var maxNumber = maxOf(n, m)
-    var minNumber = minOf(n, m)
-    var gcd = 0
-    while (maxNumber != 0 && minNumber != 0) {
-        val temp = maxNumber % minNumber
-        if (temp == 0) {
-            gcd = minNumber
-            break
-        } else {
-            maxNumber = minNumber
-            minNumber = temp
-        }
-    }
-    return (gcd == 1)
-}
+fun isCoPrime(m: Int, n: Int): Boolean =
+    (gcd(m, n) == 1)
 
 /**
  * Средняя (3 балла)
@@ -264,7 +245,20 @@ fun hasDifferentDigits(n: Int): Boolean {
  * Подумайте, как добиться более быстрой сходимости ряда при больших значениях x.
  * Использовать kotlin.math.sin и другие стандартные реализации функции синуса в этой задаче запрещается.
  */
-fun sin(x: Double, eps: Double): Double = TODO()
+fun sin(x: Double, eps: Double): Double {
+    var an = x
+    var sinx = x
+    var i = 1
+    var t = 0
+    while (an > abs(eps)) {
+        an = (x.pow(i) / factorial(i)) * (-1.0).pow(t)
+        sinx += an
+        i += 2
+        t++
+    }
+    return sinx
+
+}
 
 /**
  * Средняя (4 балла)
@@ -286,7 +280,19 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int = TODO()
+fun squareSequenceDigit(n: Int): Int {
+    var number = n
+    var i = 1
+    if (n == 1) return 1
+    while (number > 0) {
+        val curSqr = sqr(i)
+        val curSqrDigit = digitNumber(curSqr)
+        number -= curSqrDigit
+        i++
+    }
+    return ((sqr(i - 1) * 10.0.pow(number)).toInt()) % 10
+}
+
 
 /**
  * Сложная (5 баллов)
@@ -297,4 +303,15 @@ fun squareSequenceDigit(n: Int): Int = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun fibSequenceDigit(n: Int): Int = TODO()
+fun fibSequenceDigit(n: Int): Int {
+    var number = n
+    var i = 1
+    if (n == 1) return 1
+    while (number > 0) {
+        val curSqr = fib(i)
+        val curSqrDigit = digitNumber(curSqr)
+        number -= curSqrDigit
+        i++
+    }
+    return ((fib(i - 1) * 10.0.pow(number)).toInt()) % 10
+}
