@@ -1,5 +1,3 @@
-
-
 package lesson3.task1
 
 import kotlin.math.pow
@@ -93,7 +91,7 @@ fun sqr(n: Int) = n * n
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun digitNumber(n: Int): Int {
-    var number = n
+    var number = abs(n)
     var count = 0
     do {
         number /= 10
@@ -255,7 +253,7 @@ fun sin(x: Double, eps: Double): Double {
     while (newX >= (2 * PI)) {
         newX -= (2 * PI)
     }
-    while (abs(an) > eps) {
+    while (abs(an).compareTo(eps) == 1) {
         an = (newX.pow(i) / factorial(i)) * (-1.0).pow(t)
         sinX += an
         i += 2
@@ -283,7 +281,7 @@ fun cos(x: Double, eps: Double): Double {
     while (newX >= (2 * PI)) {
         newX -= (2 * PI)
     }
-    while (abs(an) > eps) {
+    while (abs(an).compareTo(eps) == 1) {
         an = (newX.pow(i) / factorial(i)) * (-1.0).pow(t)
         cosX += an
         i += 2
