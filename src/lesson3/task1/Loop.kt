@@ -214,7 +214,7 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean = (revert(n) == n)
+fun isPalindrome(n: Int): Boolean = revert(n) == n
 
 /**
  * Средняя (3 балла)
@@ -225,14 +225,14 @@ fun isPalindrome(n: Int): Boolean = (revert(n) == n)
  * Использовать операции со строками в этой задаче запрещается.
  */
 fun hasDifferentDigits(n: Int): Boolean {
-    val temp = n % 10
+    val lastDigit = n % 10
     var t = n
     var count = 0
     do {
         t /= 10
         count++
     } while (t > 0)
-    return (digitCountInNumber(n, temp) != count)
+    return digitCountInNumber(n, lastDigit) != count
 }
 
 /**
