@@ -306,7 +306,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
  */
 fun decimalFromString(str: String, base: Int): Int {
     var result = 0
-    val sList = str.map { it.code }.toMutableList()
+    val sList = str.map { it.toInt() }.toMutableList()
     for (i in sList.indices) {
         if (sList[i] > 96) sList[i] -= 87 else sList[i] -= 48
     }
