@@ -226,13 +226,7 @@ fun isPalindrome(n: Int): Boolean = revert(n) == n
  */
 fun hasDifferentDigits(n: Int): Boolean {
     val lastDigit = n % 10
-    var t = n
-    var count = 0
-    do {
-        t /= 10
-        count++
-    } while (t > 0)
-    return digitCountInNumber(n, lastDigit) != count
+    return digitCountInNumber(n, lastDigit) != digitNumber(n)
 }
 
 /**
