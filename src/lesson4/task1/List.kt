@@ -244,6 +244,7 @@ fun convert(n: Int, base: Int): List<Int> {
         list.add(number % base)
         number /= base
     }
+    if (list.isEmpty()) list.add(0)
     return list.reversed()
 
 }
@@ -272,6 +273,7 @@ fun convertToString(n: Int, base: Int): String {
             result += (87 + i).toChar()
         } else result += i.toString()
     }
+    if (result.isEmpty()) result += "0"
     return result
 }
 
@@ -404,7 +406,7 @@ fun russian(n: Int): String {
                 1 -> "одна тысяча "
                 2 -> "две тысячи "
                 3 -> "три тысячи "
-                4 -> "четыре тысяч "
+                4 -> "четыре тысячи "
                 5 -> "пять тысяч "
                 6 -> "шесть тысяч "
                 7 -> "семь тысяч "
