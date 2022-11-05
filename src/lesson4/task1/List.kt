@@ -418,6 +418,7 @@ fun russian(n: Int): String {
             if (x == 0) {
                 when {
                     t[i - 1] == 0 && result.isNotEmpty() -> result += "тысяч "
+                    t[i - 1] != 0 && result.isNotEmpty() -> result += "тысяч "
                 }
             }
         }
