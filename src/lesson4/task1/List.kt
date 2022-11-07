@@ -159,13 +159,9 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * представленные в виде списков a и b. Скалярное произведение считать по формуле:
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
-fun times(a: List<Int>, b: List<Int>): Int {
-    var result = 0
-    for (i in a.indices) {
-        result += a[i] * b[i]
-    }
-    return result
-}
+fun times(a: List<Int>, b: List<Int>): Int =
+     a.mapIndexed { index, value -> a[index] * b[index] }.sum()
+
 
 /**
  * Средняя (3 балла)
@@ -175,13 +171,8 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int {
-    var result = 0
-    for (i in p.indices) {
-        result += p[i] * x.toDouble().pow(i).toInt()
-    }
-    return result
-}
+fun polynom(p: List<Int>, x: Int): Int =
+    p.mapIndexed { index, value -> value * x.toDouble().pow(index).toInt() }.sum()
 
 /**
  * Средняя (3 балла)
@@ -194,13 +185,12 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isNotEmpty()) {
-        var number1 = list[0]
-        for (i in 1 until list.size) {
-            list[i] += number1
-            number1 = list[i]
-        }
-    } else return list
+    if (list.isEmpty()) return list
+    var number1 = list[0]
+    for (i in 1 until list.size) {
+        list[i] += number1
+        number1 = list[i]
+    }
     return list
 }
 
@@ -261,16 +251,11 @@ fun convert(n: Int, base: Int): List<Int> {
  * (например, n.toString(base) и подобные), запрещается.
  */
 fun convertToString(n: Int, base: Int): String {
-    var number = n
-    val nBased = mutableListOf<Int>()
-    while (number > 0) {
-        nBased.add(number % base)
-        number /= base
-    }
+    val nBased = convert(n, base)
     var result = ""
-    for (i in nBased.reversed()) {
+    for (i in nBased) {
         if (i > 9) {
-            result += (87 + i).toChar()
+            result += 'a' + (i - 10)
         } else result += i.toString()
     }
     if (result.isEmpty()) result += "0"
@@ -307,15 +292,11 @@ fun decimal(digits: List<Int>, base: Int): Int {
  * (например, str.toInt(base)), запрещается.
  */
 fun decimalFromString(str: String, base: Int): Int {
-    var result = 0
-    val sList = str.map { it.code }.toMutableList()
-    for (i in sList.indices) {
-        if (sList[i] > 96) sList[i] -= 87 else sList[i] -= 48
+    val numberDigit = mutableListOf<Int>()
+    for (i in str.toMutableList()) {
+        if (i.isDigit()) numberDigit.add(i - '0') else numberDigit.add(i - 'a' + 10)
     }
-    for (i in sList.indices) {
-        result += sList[i] * base.toDouble().pow(sList.size - 1 - i).toInt()
-    }
-    return result
+    return decimal(numberDigit, base)
 }
 
 /**
