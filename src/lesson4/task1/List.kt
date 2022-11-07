@@ -160,7 +160,10 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.
  */
 fun times(a: List<Int>, b: List<Int>): Int =
-     a.mapIndexed { index, value -> a[index] * b[index] }.sum()
+    a.mapIndexed { index, value -> a[index] * b[index] }.sum()
+
+// может вообще так лучше переписать?
+// List(a.size) { index-> a[index]*b[index]}.sum()
 
 
 /**
