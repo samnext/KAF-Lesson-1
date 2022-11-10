@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+//import sun.security.ec.point.ProjectivePoint.Mutable
+
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
 // Рекомендуемое количество баллов = 9
@@ -15,8 +17,7 @@ package lesson5.task1
  * игнорируется.
  */
 fun shoppingListCost(
-    shoppingList: List<String>,
-    costs: Map<String, Double>
+    shoppingList: List<String>, costs: Map<String, Double>
 ): Double {
     var totalCost = 0.0
 
@@ -37,8 +38,7 @@ fun shoppingListCost(
  * для которых телефон начинается с заданного кода страны `countryCode`
  */
 fun filterByCountryCode(
-    phoneBook: MutableMap<String, String>,
-    countryCode: String
+    phoneBook: MutableMap<String, String>, countryCode: String
 ) {
     val namesToRemove = mutableListOf<String>()
 
@@ -60,8 +60,7 @@ fun filterByCountryCode(
  * и вернуть отфильтрованный текст
  */
 fun removeFillerWords(
-    text: List<String>,
-    vararg fillerWords: String
+    text: List<String>, vararg fillerWords: String
 ): List<String> {
     val fillerWordSet = setOf(*fillerWords)
 
@@ -96,7 +95,16 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val gradeToName = mutableMapOf<Int, MutableList<String>>()
+    for ((name, grade) in grades) {
+        if (gradeToName[grade] == null) gradeToName[grade] = mutableListOf(name)
+        else {
+            gradeToName[grade]?.add(name)
+        }
+    }
+    return gradeToName
+}
 
 /**
  * Простая (2 балла)
@@ -108,7 +116,12 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "z", "b" to "sweet")) -> true
  *   containsIn(mapOf("a" to "z"), mapOf("a" to "zee", "b" to "sweet")) -> false
  */
-fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
+fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean {
+    var flag = true
+    for (key in a.keys) if (a[key] != b[key]) flag = false
+    return flag
+}
+
 
 /**
  * Простая (2 балла)
@@ -125,7 +138,9 @@ fun containsIn(a: Map<String, String>, b: Map<String, String>): Boolean = TODO()
  *     -> a changes to mutableMapOf() aka becomes empty
  */
 fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
-    TODO()
+    val keysToRemove = mutableListOf<String>()
+    for (key in a.keys) if (a[key] == b[key]) keysToRemove.add(key)
+    for (keys in keysToRemove) a.remove(keys)
 }
 
 /**
@@ -135,7 +150,12 @@ fun subtractOf(a: MutableMap<String, String>, b: Map<String, String>) {
  * В выходном списке не должно быть повторяющихся элементов,
  * т. е. whoAreInBoth(listOf("Марат", "Семён, "Марат"), listOf("Марат", "Марат")) == listOf("Марат")
  */
-fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = TODO()
+fun whoAreInBoth(a: List<String>, b: List<String>): List<String> {
+    val setOfNames = mutableSetOf<String>()
+    for (i in a.indices) if (b.contains(a[i])) setOfNames.add(a[i])
+    return setOfNames.toList()
+}
+
 
 /**
  * Средняя (3 балла)
@@ -194,7 +214,12 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  * Например:
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
-fun canBuildFrom(chars: List<Char>, word: String): Boolean = TODO()
+fun canBuildFrom(chars: List<Char>, word: String): Boolean {
+    val t = word.toSet().toList().map { it.lowercaseChar() }
+    var result = false
+    for (char in t.indices) result = chars.contains(t[char])
+    return result
+}
 
 /**
  * Средняя (4 балла)
