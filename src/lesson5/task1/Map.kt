@@ -2,6 +2,8 @@
 
 package lesson5.task1
 
+import ru.spbstu.wheels.sorted
+
 //import sun.security.ec.point.ProjectivePoint.Mutable
 
 // Урок 5: ассоциативные массивы и множества
@@ -186,6 +188,7 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  */
 fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Double> = TODO()
 
+
 /**
  * Средняя (4 балла)
  *
@@ -201,7 +204,19 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    val kindName = stuff.filterValues { it.first == kind }
+    if (kindName.isEmpty()) return null
+    var nameOfKind = ""
+    var minPrice: Double? = null
+    for ((name, pair) in stuff) {
+        if (minPrice == null || pair.second < minPrice) {
+            minPrice = pair.second
+            nameOfKind = name
+        }
+    }
+    return nameOfKind
+}
 
 /**
  * Средняя (3 балла)
@@ -213,10 +228,10 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *   canBuildFrom(listOf('a', 'b', 'o'), "baobab") -> true
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
-    val t = word.toSet().toList().map { it.lowercaseChar() }
+    val wordLetters = word.toSet().toList().map { it.lowercaseChar() }.sorted()
     if (word.isEmpty()) return true
     var res = false
-    for (char in t) res = chars.contains(char)
+    for (char in wordLetters) res = chars.contains(char)
     return res
 }
 
@@ -307,12 +322,16 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val listSet = list.toSet()
-    for (num in listSet)
-        if (listSet.contains(number - num) && listSet.indexOf(num) != listSet.indexOf(number - num)) return Pair(
-            list.indexOf(num),
-            list.indexOf(number - num)
-        )
+    val tMap = mutableMapOf<Int, Int>()
+    for ((index, value) in list.withIndex()) {
+        if (tMap[number - value] != null && value * 2 == number) {
+            return Pair(tMap[number - value]!!, index)
+        }
+        tMap[number - value] = index
+        if (tMap[value] != null && value * 2 != number) {
+            return Pair(tMap[value]!!, tMap[number - value]!!)
+        }
+    }
     return Pair(-1, -1)
 }
 
