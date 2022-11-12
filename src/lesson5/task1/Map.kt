@@ -214,7 +214,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  */
 fun canBuildFrom(chars: List<Char>, word: String): Boolean {
     val t = word.toSet().toList().map { it.lowercaseChar() }
-    if (chars.isEmpty() && word.isEmpty()) return true
+    if (word.isEmpty()) return true
     var res = false
     for (char in t) res = chars.contains(char)
     return res
@@ -309,10 +309,10 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val listSet = list.toSet()
     for (num in listSet)
-        if (listSet.contains(number - num) && number - num != num && list.size > 2) return Pair(
+        if (listSet.contains(number - num) && listSet.indexOf(num) != listSet.indexOf(number - num)) return Pair(
             list.indexOf(num),
             list.indexOf(number - num)
-        ) else if (list.size == 2 && listSet.contains(number - num)) return Pair(0, 1)
+        )
     return Pair(-1, -1)
 }
 
