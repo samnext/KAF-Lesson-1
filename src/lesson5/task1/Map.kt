@@ -209,7 +209,7 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     if (kindName.isEmpty()) return null
     var nameOfKind = ""
     var minPrice: Double? = null
-    for ((name, pair) in stuff) {
+    for ((name, pair) in kindName) {
         if (minPrice == null || pair.second < minPrice) {
             minPrice = pair.second
             nameOfKind = name
