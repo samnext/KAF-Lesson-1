@@ -162,8 +162,6 @@ fun center(list: MutableList<Double>): MutableList<Double> {
 fun times(a: List<Int>, b: List<Int>): Int =
     a.mapIndexed { index, value -> a[index] * b[index] }.sum()
 
-// может вообще так лучше переписать?
-// List(a.size) { index-> a[index]*b[index]}.sum()
 
 
 /**

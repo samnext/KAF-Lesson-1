@@ -101,9 +101,7 @@ fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
     val gradeToName = mutableMapOf<Int, MutableList<String>>()
     for ((name, grade) in grades) {
         if (gradeToName[grade] == null) gradeToName[grade] = mutableListOf(name)
-        else {
-            gradeToName[grade]?.add(name)
-        }
+        else gradeToName[grade]?.add(name)
     }
     return gradeToName
 }
@@ -171,8 +169,10 @@ fun whoAreInBoth(a: List<String>, b: List<String>): List<String> = a.intersect(b
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> {
     val mapT = (mapB + mapA).toMutableMap()
-    for ((key, value) in mapA) if (mapB[key] != value && mapB[key] != null) mapT[key] =
-        listOf(value, mapB[key]).joinToString()
+    for ((key, value) in mapA) {
+        if (mapB[key] != value && mapB[key] != null)
+            mapT[key] = listOf(value, mapB[key]).joinToString()
+    }
     return mapT
 }
 
