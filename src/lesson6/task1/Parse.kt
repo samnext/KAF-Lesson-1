@@ -77,7 +77,7 @@ fun main() {
  * входными данными.
  */
 fun dateStrToDigit(str: String): String {
-    Regex("""(\d) ([а-я]+) ([0-9]{4})""").find(str) ?: return ""
+    Regex("""(\d) ([а-я]+) ([0-9]+)""").find(str) ?: return ""
     val (day, month, year) = str.split(" ")
     val t = mapOf(
         "января" to Pair(31, 1), "февраля" to Pair(28, 2), "марта" to Pair(31, 3), "апреля" to Pair(30, 4),
@@ -101,7 +101,7 @@ fun dateStrToDigit(str: String): String {
  * входными данными.
  */
 fun dateDigitToStr(digital: String): String {
-    Regex("""(\d+)\.(\d+)\.(\d{4})""").find(digital) ?: return ""
+    Regex("""(\d+)\.(\d+)\.(\d+)""").matchEntire(digital) ?: return ""
     val (day, month, year) = digital.split(".")
     val mapOfMonths = mapOf(
         "01" to Pair(31, "января"),
@@ -178,15 +178,15 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int {
-    var sum = expression[0].digitToInt()
+    var sum: Int? = expression[0].digitToInt()
     if (Regex("""(\d+ *[+ \-]? *)+\d*""").matches(expression)) {
         val t = Regex(" ").split(expression)
         for ((index, value) in t.withIndex()) {
-            if (value == "+") sum += t[index + 1].toInt()
-            else if (value == "-") sum += -t[index + 1].toInt()
+            if (value == "+" && sum != null) sum += t[index + 1].toInt()
+            else if (value == "-" && sum != null) sum += -t[index + 1].toInt()
         }
     } else throw IllegalArgumentException()
-    return sum
+    return sum!!
 }
 
 /**
@@ -198,7 +198,13 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val t = str.split(" ")
+    val mapOfEntries = t.groupingBy { it }.eachCount()
+    val q = mapOfEntries.filter { it.value > 1 }.keys
+    if (q.isNotEmpty()) return str.indexOf(q.first())
+    return -1
+}
 
 /**
  * Сложная (6 баллов)
