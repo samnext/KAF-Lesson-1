@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import java.lang.IllegalArgumentException
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -74,7 +76,19 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+fun dateStrToDigit(str: String): String {
+    Regex("""(\d) ([а-я]+) ([0-9]{4})""").find(str) ?: return ""
+    val (day, month, year) = str.split(" ")
+    val t = mapOf(
+        "января" to Pair(31, 1), "февраля" to Pair(28, 2), "марта" to Pair(31, 3), "апреля" to Pair(30, 4),
+        "мая" to Pair(31, 5), "июня" to Pair(30, 6), "июля" to Pair(31, 7), "августа" to Pair(31, 8),
+        "сентября" to Pair(30, 9), "октября" to Pair(31, 10), "ноября" to Pair(30, 11), "декабря" to Pair(31, 12),
+    )
+    if (t[month] != null && day.toInt() <= t[month]?.first!!) {
+        return String.format("%02d.%02d.%04d", day.toInt(), t[month]?.second, year.toInt())
+    }
+    return ""
+}
 
 /**
  * Средняя (4 балла)
@@ -86,7 +100,28 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    Regex("""(\d+)\.(\d+)\.(\d{4})""").find(digital) ?: return ""
+    val (day, month, year) = digital.split(".")
+    val mapOfMonths = mapOf(
+        "01" to Pair(31, "января"),
+        "02" to Pair(28, "февраля"),
+        "03" to Pair(31, "марта"),
+        "04" to Pair(30, "апреля"),
+        "05" to Pair(31, "мая"),
+        "06" to Pair(30, "июня"),
+        "07" to Pair(31, "июля"),
+        "08" to Pair(31, "августа"),
+        "09" to Pair(30, "сентября"),
+        "10" to Pair(31, "октября"),
+        "11" to Pair(30, "ноября"),
+        "12" to Pair(31, "декабря")
+    )
+    if (mapOfMonths[month] != null && day.toInt() <= mapOfMonths[month]?.first!!) {
+        return String.format("%d %s %d", day.toInt(), mapOfMonths[month]?.second!!, year.toInt())
+    }
+    return ""
+}
 
 /**
  * Средняя (4 балла)
@@ -114,7 +149,11 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    Regex("""[%\-\d\s*]+""").matchEntire(jumps) ?: return -1
+    val t = Regex("(%)|(-)").split(jumps).maxOfOrNull { it.trim() }
+    return if (t != null && t.isEmpty()) -1 else t!!.toInt()
+}
 
 /**
  * Сложная (6 баллов)
@@ -138,7 +177,17 @@ fun bestHighJump(jumps: String): Int = TODO()
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int = TODO()
+fun plusMinus(expression: String): Int {
+    var q = expression[0].digitToInt()
+    if (Regex("""(\d+ *[+ \-]? *)+\d*""").matches(expression)) {
+        val t = Regex(" ").split(expression)
+        for ((index, value) in t.withIndex()) {
+            if (value == "+") q += t[index + 1].toInt()
+            else if (value == "-") q += -t[index + 1].toInt()
+        }
+    } else throw IllegalArgumentException()
+    return q
+}
 
 /**
  * Сложная (6 баллов)
