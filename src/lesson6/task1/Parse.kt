@@ -85,6 +85,11 @@ fun dateStrToDigit(str: String): String {
         "сентября" to Pair(30, 9), "октября" to Pair(31, 10), "ноября" to Pair(30, 11), "декабря" to Pair(31, 12),
     )
     if (t[month] != null && day.toInt() <= t[month]?.first!!) {
+        if (day == "29" && month == "февраля") {
+            return if (year.toInt() % 4 == 0) {
+                String.format("%02d.%02d.%d", day.toInt(), t[month]?.second, year.toInt())
+            } else ""
+        }
         return String.format("%02d.%02d.%d", day.toInt(), t[month]?.second, year.toInt())
     }
     return ""
