@@ -80,13 +80,13 @@ fun dateStrToDigit(str: String): String {
     Regex("""(\d) ([а-я]+) ([0-9]+)""").find(str) ?: return ""
     val (day, month, year) = str.split(" ")
     val t = mapOf(
-        "января" to Pair(31, 1), "февраля" to Pair(28, 2), "марта" to Pair(31, 3), "апреля" to Pair(30, 4),
+        "января" to Pair(31, 1), "февраля" to Pair(29, 2), "марта" to Pair(31, 3), "апреля" to Pair(30, 4),
         "мая" to Pair(31, 5), "июня" to Pair(30, 6), "июля" to Pair(31, 7), "августа" to Pair(31, 8),
         "сентября" to Pair(30, 9), "октября" to Pair(31, 10), "ноября" to Pair(30, 11), "декабря" to Pair(31, 12),
     )
     if (t[month] != null && day.toInt() <= t[month]?.first!!) {
         if (day == "29" && month == "февраля") {
-            return if (year.toInt() % 4 == 0) {
+            return if ((year.toInt() % 4 == 0 && year.toInt() % 100 != 0) || year.toInt() % 400 == 0) {
                 String.format("%02d.%02d.%d", day.toInt(), t[month]?.second, year.toInt())
             } else ""
         }
@@ -124,7 +124,7 @@ fun dateDigitToStr(digital: String): String {
     )
     if (mapOfMonths[month] != null && day.toInt() <= mapOfMonths[month]?.first!!) {
         if (month == "02" && day == "29") {
-            return if (year.toInt() % 4 == 0) {
+            return if ((year.toInt() % 4 == 0 && year.toInt() % 100 != 0) || year.toInt() % 400 == 0) {
                 String.format("%d %s %d", day.toInt(), mapOfMonths[month]?.second!!, year.toInt())
             } else ""
         }
@@ -189,7 +189,7 @@ fun bestHighJump(jumps: String): Int = TODO()
  */
 fun plusMinus(expression: String): Int {
     if (expression.isEmpty()) throw IllegalArgumentException()
-    var sum = expression[0].digitToInt()
+    var sum = expression.split(" ").first().toInt()
     if (Regex("""(\d+ *[+ \-]? *)+\d*""").matches(expression)) {
         val t = Regex(" ").split(expression)
         for ((index, value) in t.withIndex()) {
