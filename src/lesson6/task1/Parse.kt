@@ -85,7 +85,7 @@ fun dateStrToDigit(str: String): String {
         "сентября" to Pair(30, 9), "октября" to Pair(31, 10), "ноября" to Pair(30, 11), "декабря" to Pair(31, 12),
     )
     if (t[month] != null && day.toInt() <= t[month]?.first!!) {
-        return String.format("%02d.%02d.%04d", day.toInt(), t[month]?.second, year.toInt())
+        return String.format("%02d.%02d.%d", day.toInt(), t[month]?.second, year.toInt())
     }
     return ""
 }
@@ -105,7 +105,7 @@ fun dateDigitToStr(digital: String): String {
     val (day, month, year) = digital.split(".")
     val mapOfMonths = mapOf(
         "01" to Pair(31, "января"),
-        "02" to Pair(28, "февраля"),
+        "02" to Pair(29, "февраля"),
         "03" to Pair(31, "марта"),
         "04" to Pair(30, "апреля"),
         "05" to Pair(31, "мая"),
@@ -118,6 +118,11 @@ fun dateDigitToStr(digital: String): String {
         "12" to Pair(31, "декабря")
     )
     if (mapOfMonths[month] != null && day.toInt() <= mapOfMonths[month]?.first!!) {
+        if (month == "02" && day == "29") {
+            return if (year.toInt() % 4 == 0) {
+                String.format("%d %s %d", day.toInt(), mapOfMonths[month]?.second!!, year.toInt())
+            } else ""
+        }
         return String.format("%d %s %d", day.toInt(), mapOfMonths[month]?.second!!, year.toInt())
     }
     return ""
