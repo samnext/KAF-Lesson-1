@@ -208,9 +208,9 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
     val kindName = stuff.filterValues { it.first == kind }
     if (kindName.isEmpty()) return null
     var nameOfKind = ""
-    var minPrice: Double? = null
+    var minPrice = Double.MAX_VALUE
     for ((name, pair) in kindName) {
-        if (minPrice == null || pair.second < minPrice) {
+        if (pair.second < minPrice) {
             minPrice = pair.second
             nameOfKind = name
         }
@@ -322,13 +322,8 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
     val tMap = mutableMapOf<Int, Int>()
     for ((index, value) in list.withIndex()) {
-        if (tMap[number - value] != null && value * 2 == number) {
-            return Pair(tMap[number - value]!!, index)
-        }
-        tMap[number - value] = index
-        if (tMap[value] != null && value * 2 != number) {
-            return Pair(tMap[value]!!, tMap[number - value]!!)
-        }
+        if (tMap[number - value] != null) return Pair(tMap[number - value]!!, index)
+        tMap[value] = index
     }
     return Pair(-1, -1)
 }
