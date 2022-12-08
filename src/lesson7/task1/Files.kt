@@ -8,6 +8,7 @@ import java.io.File
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.floor
+import kotlin.math.max
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -261,8 +262,11 @@ fun chooseLongestChaoticWord(inputName: String, outputName: String) {
     var maxLength = Int.MIN_VALUE
     for (element in File(inputName).readLines()) {
         if (element.lowercase().toSet().size == element.length && element.length >= maxLength) {
-            maxLength = maxOf(maxLength, element.length)
-            l.add(element)
+            if (maxLength < element.length) {
+                maxLength = maxOf(maxLength, element.length)
+                l.clear()
+                l.add(element)
+            } else l.add(element)
         }
     }
     q.write(l.joinToString(separator = ", "))
