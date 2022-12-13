@@ -124,14 +124,15 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    val maxStrLength = File(inputName).readLines().maxOfOrNull { it.trim().length } ?: return
-    File(outputName).bufferedWriter().use { wr ->
-        if (File(inputName).readLines().isEmpty()) wr.write("")
-        for (i in File(inputName).readLines()) {
-            wr.write(
-                " ".repeat((maxStrLength - i.trim().length) / 2) + i.trim()
-            )
-            wr.newLine()
+    if (File(inputName).readLines().isNotEmpty()) {
+        File(outputName).bufferedWriter().use { wr ->
+            val maxStrLength = File(inputName).readLines().maxOfOrNull { it.trim().length } ?: 0
+            for (i in File(inputName).readLines()) {
+                wr.write(
+                    " ".repeat((maxStrLength - i.trim().length) / 2) + i.trim()
+                )
+                wr.newLine()
+            }
         }
     }
 }
@@ -166,8 +167,8 @@ fun centerFile(inputName: String, outputName: String) {
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
     val strClear = File(inputName).readLines().mapIndexed { _, str -> str.trim().replace(Regex(""" +"""), " ") }
-    val maxStrLength = strClear.maxOfOrNull { it.length } ?: return
     File(outputName).bufferedWriter().use { wr ->
+        val maxStrLength = strClear.maxOfOrNull { it.length } ?: 0
         for (str in strClear) {
             val words = str.split(" ")
             if (words.size > 1) {
