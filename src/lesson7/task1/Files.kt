@@ -2,16 +2,8 @@
 
 package lesson7.task1
 
-import ru.spbstu.wheels.NullableMonad.filter
-import ru.spbstu.wheels.NullableMonad.map
-import ru.spbstu.wheels.asList
-import ru.spbstu.wheels.out
 import java.io.File
-import java.util.*
-import kotlin.math.ceil
-import kotlin.math.floor
-import kotlin.math.max
-import kotlin.math.round
+
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
