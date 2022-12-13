@@ -3,12 +3,15 @@
 package lesson7.task1
 
 import ru.spbstu.wheels.NullableMonad.filter
+import ru.spbstu.wheels.NullableMonad.map
 import ru.spbstu.wheels.asList
+import ru.spbstu.wheels.out
 import java.io.File
 import java.util.*
 import kotlin.math.ceil
 import kotlin.math.floor
 import kotlin.math.max
+import kotlin.math.round
 
 // Урок 7: работа с файлами
 // Урок интегральный, поэтому его задачи имеют сильно увеличенную стоимость
@@ -122,21 +125,15 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    val t = File(inputName).readLines().toMutableList().map { it.trim() }
-    val q = File(outputName).bufferedWriter()
-    val longestStr = t.find { it -> it.length == t.maxOf { it.length } }
-    for (index in t.indices) {
-        var amountOfSpaces = 0
-        var spaces = ""
-        while (amountOfSpaces < floor((longestStr!!.length - t[index].length).toDouble() / 2.0)) {
-            spaces += " "
-            amountOfSpaces++
+    val maxStrLength = File(inputName).readLines().maxOf { it.trim().length }
+    File(outputName).bufferedWriter().use { wr ->
+        for (i in File(inputName).readLines()) {
+            wr.write(
+                " ".repeat((maxStrLength - i.trim().length) / 2) + i.trim()
+            )
+            wr.newLine()
         }
-        spaces += t[index]
-        q.write("$spaces\n")
     }
-    q.close()
-
 }
 
 
@@ -170,6 +167,7 @@ fun centerFile(inputName: String, outputName: String) {
 fun alignFileByWidth(inputName: String, outputName: String) {
     TODO()
 }
+
 
 /**
  * Средняя (14 баллов)
